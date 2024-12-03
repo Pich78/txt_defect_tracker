@@ -118,7 +118,6 @@ const defects = [
         "Component": "Core",
         "Version": "1.3.0",
         "Severity": "Critical",
-        "Reporter": "george",
         "Owner": "hannah",
         "CC": [
             "core_team",

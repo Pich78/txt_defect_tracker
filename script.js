@@ -11,7 +11,7 @@ function populateFilters() {
         filterRow.innerHTML = '';
         columns.forEach(column => {
             if (visibleColumns.has(column)) {
-                const uniqueValues = [...new Set(defects.map(defect => defect[column]))];
+                const uniqueValues = [...new Set(defects.map(defect => defect[column] || ""))];
                 const select = document.createElement('select');
                 select.classList.add('filter');
                 select.id = `filter${column}${index + 1}`;
@@ -50,7 +50,7 @@ function renderTable() {
             if (visibleColumns.has(column)) {
                 const cell = document.createElement('td');
                 cell.classList.add(`column-${column}`);
-                cell.innerText = Array.isArray(defect[column]) ? defect[column].join(', ') : defect[column];
+                cell.innerText = Array.isArray(defect[column]) ? defect[column].join(', ') : (defect[column] || "");
                 row.appendChild(cell);
             }
         });
@@ -102,10 +102,13 @@ function sortTable(column) {
     }
 
     defects.sort((a, b) => {
-        if (a[column] < b[column]) {
+        const aValue = a[column] || "";
+        const bValue = b[column] || "";
+        
+        if (aValue < bValue) {
             return sortOrder[column] === 'asc' ? -1 : 1;
         }
-        if (a[column] > b[column]) {
+        if (aValue > bValue) {
             return sortOrder[column] === 'asc' ? 1 : -1;
         }
         return 0;
