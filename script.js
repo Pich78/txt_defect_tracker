@@ -2,35 +2,26 @@ let currentPage = 1;
 let itemsPerPage = 20;
 let sortOrder = {};
 const columns = ['ID', 'Summary', 'Component', 'Version', 'Milestone', 'Type', 'Severity', 'Owner', 'Status', 'Time', 'Changetime', 'Reporter', 'CC', 'Keywords', 'Resolution', 'Project'];
-let filters = {
-    ID: 'ALL',
-    Summary: 'ALL',
-    Component: 'ALL',
-    Version: 'ALL',
-    Milestone: 'ALL',
-    Type: 'ALL',
-    Severity: 'ALL',
-    Owner: 'ALL',
-    Status: 'ALL',
-    Time: 'ALL',
-    Changetime: 'ALL',
-    Reporter: 'ALL',
-    CC: 'ALL',
-    Keywords: 'ALL',
-    Resolution: 'ALL',
-    Project: 'ALL'
-};
+let filterRows = [{ ID: 'ALL', Summary: 'ALL', Component: 'ALL', Version: 'ALL', Milestone: 'ALL', Type: 'ALL', Severity: 'ALL', Owner: 'ALL', Status: 'ALL', Time: 'ALL', Changetime: 'ALL', Reporter: 'ALL', CC: 'ALL', Keywords: 'ALL', Resolution: 'ALL', Project: 'ALL' }];
 
 function populateFilters() {
-    columns.forEach(column => {
-        const uniqueValues = [...new Set(defects.map(defect => defect[column]))];
-        const filterElement = document.getElementById(`filter${column}`);
-        filterElement.innerHTML = '<option value="ALL">ALL</option>';
-        uniqueValues.forEach(value => {
-            const option = document.createElement('option');
-            option.value = value;
-            option.text = value;
-            filterElement.appendChild(option);
+    filterRows.forEach((filters, index) => {
+        const filterRow = document.getElementById(`filterRow${index + 1}`);
+        filterRow.innerHTML = '';
+        columns.forEach(column => {
+            const uniqueValues = [...new Set(defects.map(defect => defect[column]))];
+            const select = document.createElement('select');
+            select.classList.add('filter');
+            select.id = `filter${column}${index + 1}`;
+            select.onchange = applyFilters;
+            select.innerHTML = '<option value="ALL">ALL</option>';
+            uniqueValues.forEach(value => {
+                const option = document.createElement('option');
+                option.value = value;
+                option.text = value;
+                select.appendChild(option);
+            });
+            filterRow.appendChild(select);
         });
     });
 }
@@ -42,8 +33,10 @@ function renderTable() {
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
     const filteredItems = defects.filter(defect => {
-        return Object.keys(filters).every(key => {
-            return filters[key] === 'ALL' || defect[key] == filters[key];
+        return filterRows.some(filters => {
+            return Object.keys(filters).every(key => {
+                return filters[key] === 'ALL' || defect[key] == filters[key];
+            });
         });
     });
     const paginatedItems = filteredItems.slice(start, end);
@@ -128,12 +121,25 @@ function sortTable(column) {
 }
 
 function applyFilters() {
-    columns.forEach(column => {
-        const filterValue = document.getElementById(`filter${column}`).value;
-        filters[column] = filterValue;
+    filterRows.forEach((filters, index) => {
+        columns.forEach(column => {
+            const filterValue = document.getElementById(`filter${column}${index + 1}`).value;
+            filters[column] = filterValue;
+        });
     });
     currentPage = 1;
     renderTable();
+}
+
+function addFilterRow() {
+    const newFilterRow = { ID: 'ALL', Summary: 'ALL', Component: 'ALL', Version: 'ALL', Milestone: 'ALL', Type: 'ALL', Severity: 'ALL', Owner: 'ALL', Status: 'ALL', Time: 'ALL', Changetime: 'ALL', Reporter: 'ALL', CC: 'ALL', Keywords: 'ALL', Resolution: 'ALL', Project: 'ALL' };
+    filterRows.push(newFilterRow);
+    const filterContainer = document.getElementById('filterContainer');
+    const newRowDiv = document.createElement('div');
+    newRowDiv.classList.add('filter-row');
+    newRowDiv.id = `filterRow${filterRows.length}`;
+    filterContainer.appendChild(newRowDiv);
+    populateFilters();
 }
 
 document.addEventListener('DOMContentLoaded', () => {

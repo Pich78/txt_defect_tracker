@@ -30,6 +30,10 @@
             margin-bottom: 10px;
             display: block;
         }
+        .filter-row {
+            display: flex;
+            justify-content: space-between;
+        }
     </style>
 </head>
 <body>
@@ -37,105 +41,31 @@
     <label for="itemsPerPage">Items per page:</label>
     <input type="number" id="itemsPerPage" value="20" min="1" onkeypress="if(event.key === 'Enter') changeItemsPerPage()">
     <button onclick="changeItemsPerPage()">Update</button>
+    <button onclick="addFilterRow()">Add Filter Row</button>
+    <div id="filterContainer">
+        <div class="filter-row" id="filterRow1">
+            <!-- Filter dropdowns will be populated here by JavaScript -->
+        </div>
+    </div>
     <table class="listing code" id="defectTable">
         <thead>
             <tr>
-                <th>
-                    <div>
-                        <select class="filter" id="filterID" onchange="applyFilters()"></select>
-                        <span>Ticket</span>
-                    </div>
-                </th>
-                <th>
-                    <div>
-                        <select class="filter" id="filterSummary" onchange="applyFilters()"></select>
-                        <span>Summary</span>
-                    </div>
-                </th>
-                <th>
-                    <div>
-                        <select class="filter" id="filterComponent" onchange="applyFilters()"></select>
-                        <span>Component</span>
-                    </div>
-                </th>
-                <th>
-                    <div>
-                        <select class="filter" id="filterVersion" onchange="applyFilters()"></select>
-                        <span>Version</span>
-                    </div>
-                </th>
-                <th>
-                    <div>
-                        <select class="filter" id="filterMilestone" onchange="applyFilters()"></select>
-                        <span>Milestone</span>
-                    </div>
-                </th>
-                <th>
-                    <div>
-                        <select class="filter" id="filterType" onchange="applyFilters()"></select>
-                        <span>Type</span>
-                    </div>
-                </th>
-                <th>
-                    <div>
-                        <select class="filter" id="filterSeverity" onchange="applyFilters()"></select>
-                        <span>Severity</span>
-                    </div>
-                </th>
-                <th>
-                    <div>
-                        <select class="filter" id="filterOwner" onchange="applyFilters()"></select>
-                        <span>Owner</span>
-                    </div>
-                </th>
-                <th>
-                    <div>
-                        <select class="filter" id="filterStatus" onchange="applyFilters()"></select>
-                        <span>Status</span>
-                    </div>
-                </th>
-                <th>
-                    <div>
-                        <select class="filter" id="filterTime" onchange="applyFilters()"></select>
-                        <span>Created</span>
-                    </div>
-                </th>
-                <th>
-                    <div>
-                        <select class="filter" id="filterChangetime" onchange="applyFilters()"></select>
-                        <span>Changetime</span>
-                    </div>
-                </th>
-                <th>
-                    <div>
-                        <select class="filter" id="filterReporter" onchange="applyFilters()"></select>
-                        <span>Reporter</span>
-                    </div>
-                </th>
-                <th>
-                    <div>
-                        <select class="filter" id="filterCC" onchange="applyFilters()"></select>
-                        <span>CC</span>
-                    </div>
-                </th>
-                <th>
-                    <div>
-                        <select class="filter" id="filterKeywords" onchange="applyFilters()"></select>
-                        <span>Keywords</span>
-                    </div>
-                </th>
-                <th>
-                    <div>
-                        <select class="filter" id="filterResolution" onchange="applyFilters()"></select>
-                        <span>Resolution</span>
-                    </div>
-                </th>
-                <th>
-                    <div>
-                        <select class="filter" id="filterProject" onchange="applyFilters()"></select>
-                        <span>Project</span>
-                    </div>
-                </th>
+                <th>Ticket</th>
+                <th>Summary</th>
+                <th>Component</th>
+                <th>Version</th>
+                <th>Milestone</th>
+                <th>Type</th>
+                <th>Severity</th>
+                <th>Owner</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Changetime</th>
+                <th>Reporter</th>
+                <th>CC</th>
+                <th>Keywords</th>
+                <th>Resolution</th>
+                <th>Project</th>
             </tr>
         </thead>
         <tbody id="defectTableBody">
