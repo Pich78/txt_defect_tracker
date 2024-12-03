@@ -50,7 +50,11 @@ function renderTable() {
             if (visibleColumns.has(column)) {
                 const cell = document.createElement('td');
                 cell.classList.add(`column-${column}`);
-                cell.innerText = Array.isArray(defect[column]) ? defect[column].join(', ') : (defect[column] || "");
+                if (column === 'ID') {
+                    cell.innerHTML = `<a href="details.html?id=${defect.ID}">#${defect.ID}</a>`;
+                } else {
+                    cell.innerText = Array.isArray(defect[column]) ? defect[column].join(', ') : (defect[column] || "");
+                }
                 row.appendChild(cell);
             }
         });
