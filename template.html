@@ -29,6 +29,10 @@
         .filter {
             margin-bottom: 10px;
             display: block;
+            width: 150px; /* Set a fixed width for the dropdowns */
+            white-space: nowrap; /* Prevent text from wrapping */
+            overflow: hidden; /* Hide overflow text */
+            text-overflow: ellipsis; /* Add ellipsis (...) for overflow text */
         }
         .filter-row {
             display: flex;
@@ -69,32 +73,11 @@
             </tr>
         </thead>
         <tbody id="defectTableBody">
-            {% for defect in defects %}
-            <tr>
-                <td>#{{ defect.ID }}</td>
-                <td>{{ defect.Summary }}</td>
-                <td>{{ defect.Component }}</td>
-                <td>{{ defect.Version }}</td>
-                <td>{{ defect.Milestone }}</td>
-                <td>{{ defect.Type }}</td>
-                <td>{{ defect.Severity }}</td>
-                <td>{{ defect.Owner }}</td>
-                <td>{{ defect.Status }}</td>
-                <td>{{ defect.Time }}</td>
-                <td>{{ defect.Changetime }}</td>
-                <td>{{ defect.Reporter }}</td>
-                <td>{{ defect.CC | join(', ') }}</td>
-                <td>{{ defect.Keywords | join(', ') }}</td>
-                <td>{{ defect.Resolution }}</td>
-                <td>{{ defect.Project }}</td>
-            </tr>
-            {% endfor %}
+            <!-- Table rows will be populated here by JavaScript -->
         </tbody>
     </table>
     <div class="pagination" id="pagination"></div>
-    <script>
-        const defects = {{ defects|tojson|safe }};
-    </script>
+    <script src="data.js"></script> <!-- Load the defects data -->
     <script src="script.js"></script>
 </body>
 </html>

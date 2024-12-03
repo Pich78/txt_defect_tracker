@@ -10,17 +10,22 @@ def load_defects(directory):
                 defects.append(json.load(f))
     return defects
 
-def render_template(defects, template_file='template.html'):
+def render_template(template_file='template.html'):
     env = Environment(loader=FileSystemLoader('.'))
     template = env.get_template(template_file)
-    return template.render(defects=defects)
+    return template.render()
+
+def save_defects_to_js(defects, output_file='data.js'):
+    with open(output_file, 'w') as f:
+        f.write(f"const defects = {json.dumps(defects, indent=4)};")
 
 def main():
     defects = load_defects('defects')  # Directory containing JSON files
-    html_output = render_template(defects)
+    save_defects_to_js(defects)  # Save defects to data.js
+    html_output = render_template()
     with open('defect_list.html', 'w') as f:
         f.write(html_output)
-    print("HTML file 'defect_list.html' has been created.")
+    print("HTML file 'defect_list.html' and data.js have been created.")
 
 if __name__ == "__main__":
     main()
