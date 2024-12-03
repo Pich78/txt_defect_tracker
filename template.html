@@ -26,6 +26,10 @@
         th {
             cursor: pointer;
         }
+        .filter {
+            margin-bottom: 10px;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -36,22 +40,102 @@
     <table class="listing code" id="defectTable">
         <thead>
             <tr>
-                <th onclick="sortTable('ID')">Ticket</th>
-                <th onclick="sortTable('Summary')">Summary</th>
-                <th onclick="sortTable('Component')">Component</th>
-                <th onclick="sortTable('Version')">Version</th>
-                <th onclick="sortTable('Milestone')">Milestone</th>
-                <th onclick="sortTable('Type')">Type</th>
-                <th onclick="sortTable('Severity')">Severity</th>
-                <th onclick="sortTable('Owner')">Owner</th>
-                <th onclick="sortTable('Status')">Status</th>
-                <th onclick="sortTable('Time')">Created</th>
-                <th onclick="sortTable('Changetime')">Changetime</th>
-                <th onclick="sortTable('Reporter')">Reporter</th>
-                <th onclick="sortTable('CC')">CC</th>
-                <th onclick="sortTable('Keywords')">Keywords</th>
-                <th onclick="sortTable('Resolution')">Resolution</th>
-                <th onclick="sortTable('Project')">Project</th>
+                <th>
+                    <div>
+                        <select class="filter" id="filterID" onchange="applyFilters()"></select>
+                        <span>Ticket</span>
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <select class="filter" id="filterSummary" onchange="applyFilters()"></select>
+                        <span>Summary</span>
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <select class="filter" id="filterComponent" onchange="applyFilters()"></select>
+                        <span>Component</span>
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <select class="filter" id="filterVersion" onchange="applyFilters()"></select>
+                        <span>Version</span>
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <select class="filter" id="filterMilestone" onchange="applyFilters()"></select>
+                        <span>Milestone</span>
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <select class="filter" id="filterType" onchange="applyFilters()"></select>
+                        <span>Type</span>
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <select class="filter" id="filterSeverity" onchange="applyFilters()"></select>
+                        <span>Severity</span>
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <select class="filter" id="filterOwner" onchange="applyFilters()"></select>
+                        <span>Owner</span>
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <select class="filter" id="filterStatus" onchange="applyFilters()"></select>
+                        <span>Status</span>
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <select class="filter" id="filterTime" onchange="applyFilters()"></select>
+                        <span>Created</span>
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <select class="filter" id="filterChangetime" onchange="applyFilters()"></select>
+                        <span>Changetime</span>
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <select class="filter" id="filterReporter" onchange="applyFilters()"></select>
+                        <span>Reporter</span>
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <select class="filter" id="filterCC" onchange="applyFilters()"></select>
+                        <span>CC</span>
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <select class="filter" id="filterKeywords" onchange="applyFilters()"></select>
+                        <span>Keywords</span>
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <select class="filter" id="filterResolution" onchange="applyFilters()"></select>
+                        <span>Resolution</span>
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <select class="filter" id="filterProject" onchange="applyFilters()"></select>
+                        <span>Project</span>
+                    </div>
+                </th>
             </tr>
         </thead>
         <tbody id="defectTableBody">
@@ -78,9 +162,9 @@
         </tbody>
     </table>
     <div class="pagination" id="pagination"></div>
-	<script>
-		const defects = {{ defects|tojson|safe }};
-	</script>
+    <script>
+        const defects = {{ defects|tojson|safe }};
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

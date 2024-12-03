@@ -2,6 +2,38 @@ let currentPage = 1;
 let itemsPerPage = 20;
 let sortOrder = {};
 const columns = ['ID', 'Summary', 'Component', 'Version', 'Milestone', 'Type', 'Severity', 'Owner', 'Status', 'Time', 'Changetime', 'Reporter', 'CC', 'Keywords', 'Resolution', 'Project'];
+let filters = {
+    ID: 'ALL',
+    Summary: 'ALL',
+    Component: 'ALL',
+    Version: 'ALL',
+    Milestone: 'ALL',
+    Type: 'ALL',
+    Severity: 'ALL',
+    Owner: 'ALL',
+    Status: 'ALL',
+    Time: 'ALL',
+    Changetime: 'ALL',
+    Reporter: 'ALL',
+    CC: 'ALL',
+    Keywords: 'ALL',
+    Resolution: 'ALL',
+    Project: 'ALL'
+};
+
+function populateFilters() {
+    columns.forEach(column => {
+        const uniqueValues = [...new Set(defects.map(defect => defect[column]))];
+        const filterElement = document.getElementById(`filter${column}`);
+        filterElement.innerHTML = '<option value="ALL">ALL</option>';
+        uniqueValues.forEach(value => {
+            const option = document.createElement('option');
+            option.value = value;
+            option.text = value;
+            filterElement.appendChild(option);
+        });
+    });
+}
 
 function renderTable() {
     console.log('Rendering table');
@@ -9,7 +41,12 @@ function renderTable() {
     tableBody.innerHTML = '';
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    const paginatedItems = defects.slice(start, end);
+    const filteredItems = defects.filter(defect => {
+        return Object.keys(filters).every(key => {
+            return filters[key] === 'ALL' || defect[key] == filters[key];
+        });
+    });
+    const paginatedItems = filteredItems.slice(start, end);
 
     paginatedItems.forEach(defect => {
         const row = document.createElement('tr');
@@ -34,14 +71,14 @@ function renderTable() {
         tableBody.appendChild(row);
     });
 
-    renderPagination();
+    renderPagination(filteredItems.length);
 }
 
-function renderPagination() {
+function renderPagination(totalItems) {
     console.log('Rendering pagination');
     const pagination = document.getElementById('pagination');
     pagination.innerHTML = '';
-    const pageCount = Math.ceil(defects.length / itemsPerPage);
+    const pageCount = Math.ceil(totalItems / itemsPerPage);
 
     for (let i = 1; i <= pageCount; i++) {
         const pageLink = document.createElement('a');
@@ -90,7 +127,17 @@ function sortTable(column) {
     renderTable();
 }
 
+function applyFilters() {
+    columns.forEach(column => {
+        const filterValue = document.getElementById(`filter${column}`).value;
+        filters[column] = filterValue;
+    });
+    currentPage = 1;
+    renderTable();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed');
+    populateFilters();
     renderTable();
 });
