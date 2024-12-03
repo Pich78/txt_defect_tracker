@@ -5,11 +5,32 @@
     <title>Defect List</title>
     <link rel="stylesheet" href="trac.css">
     <link rel="stylesheet" href="code.css">
-	<link rel="stylesheet" href="report.css">
+    <link rel="stylesheet" href="report.css">
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .pagination a {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            text-decoration: none;
+            color: #333;
+        }
+        .pagination a.active {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <h1>All Active Tickets</h1>
-    <table class="listing code">
+    <label for="itemsPerPage">Items per page:</label>
+    <input type="number" id="itemsPerPage" value="20" min="1" onkeypress="if(event.key === 'Enter') changeItemsPerPage()">
+    <button onclick="changeItemsPerPage()">Update</button>
+    <table class="listing code" id="defectTable">
         <thead>
             <tr>
                 <th>Ticket</th>
@@ -30,7 +51,7 @@
                 <th>Project</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="defectTableBody">
             
             <tr>
                 <td>#101</td>
@@ -127,21 +148,199 @@
                 <td>Project E</td>
             </tr>
             
+            <tr>
+                <td>#106</td>
+                <td>Fix login bug</td>
+                <td>Authentication</td>
+                <td>1.0.0</td>
+                <td>Release 1.0</td>
+                <td>Defect</td>
+                <td>Critical</td>
+                <td>janedoe</td>
+                <td>New</td>
+                <td>2024-12-03 12:00:00</td>
+                <td>2024-12-03 12:15:00</td>
+                <td>johndoe</td>
+                <td>teamlead, qa</td>
+                <td>login, bug, urgent</td>
+                <td>Unresolved</td>
+                <td>Project A</td>
+            </tr>
+            
+            <tr>
+                <td>#107</td>
+                <td>UI alignment issue on dashboard</td>
+                <td>UI</td>
+                <td>1.0.1</td>
+                <td>Release 1.1</td>
+                <td>Defect</td>
+                <td>Major</td>
+                <td>bob</td>
+                <td>Open</td>
+                <td>2024-12-02 09:30:00</td>
+                <td>2024-12-02 10:00:00</td>
+                <td>alice</td>
+                <td>ui_team, qa</td>
+                <td>ui, alignment, dashboard</td>
+                <td>Unresolved</td>
+                <td>Project B</td>
+            </tr>
+            
+            <tr>
+                <td>#108</td>
+                <td>Performance degradation in search functionality</td>
+                <td>Search</td>
+                <td>1.1.0</td>
+                <td>Release 1.2</td>
+                <td>Defect</td>
+                <td>Critical</td>
+                <td>dave</td>
+                <td>In Progress</td>
+                <td>2024-12-01 14:45:00</td>
+                <td>2024-12-01 15:30:00</td>
+                <td>charlie</td>
+                <td>search_team, qa</td>
+                <td>performance, search, slow</td>
+                <td>Unresolved</td>
+                <td>Project C</td>
+            </tr>
+            
+            <tr>
+                <td>#109</td>
+                <td>Incorrect calculation in financial report</td>
+                <td>Reporting</td>
+                <td>1.2.0</td>
+                <td>Release 1.3</td>
+                <td>Defect</td>
+                <td>Major</td>
+                <td>frank</td>
+                <td>New</td>
+                <td>2024-11-30 11:00:00</td>
+                <td>2024-11-30 11:45:00</td>
+                <td>eve</td>
+                <td>finance_team, qa</td>
+                <td>calculation, report, finance</td>
+                <td>Unresolved</td>
+                <td>Project D</td>
+            </tr>
+            
+            <tr>
+                <td>#110</td>
+                <td>Crash on startup</td>
+                <td>Core</td>
+                <td>1.3.0</td>
+                <td>Release 1.4</td>
+                <td>Defect</td>
+                <td>Critical</td>
+                <td>hannah</td>
+                <td>Open</td>
+                <td>2024-11-29 08:15:00</td>
+                <td>2024-11-29 09:00:00</td>
+                <td>george</td>
+                <td>core_team, qa</td>
+                <td>crash, startup, windows</td>
+                <td>Unresolved</td>
+                <td>Project E</td>
+            </tr>
+            
+            <tr>
+                <td>#111</td>
+                <td>Fix login bug</td>
+                <td>Authentication</td>
+                <td>1.0.0</td>
+                <td>Release 1.0</td>
+                <td>Defect</td>
+                <td>Critical</td>
+                <td>janedoe</td>
+                <td>New</td>
+                <td>2024-12-03 12:00:00</td>
+                <td>2024-12-03 12:15:00</td>
+                <td>johndoe</td>
+                <td>teamlead, qa</td>
+                <td>login, bug, urgent</td>
+                <td>Unresolved</td>
+                <td>Project A</td>
+            </tr>
+            
         </tbody>
     </table>
-    <div class="pagination">
-        <a href="#">&laquo;</a>
-        <a href="#">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#">4</a>
-        <a href="#">5</a>
-        <a href="#">6</a>
-        <a href="#">7</a>
-        <a href="#">8</a>
-        <a href="#">9</a>
-        <a href="#">10</a>
-        <a href="#">&raquo;</a>
-    </div>
+    <div class="pagination" id="pagination"></div>
+    <script>
+        const defects = [{"CC": ["teamlead", "qa"], "Changetime": "2024-12-03 12:15:00", "Component": "Authentication", "Description": "Users are unable to log in due to a server error. The issue seems to be related to the authentication module.", "ID": 101, "Keywords": ["login", "bug", "urgent"], "Milestone": "Release 1.0", "Owner": "janedoe", "Priority": "High", "Project": "Project A", "Reporter": "johndoe", "Resolution": "Unresolved", "Severity": "Critical", "Status": "New", "Summary": "Fix login bug", "Time": "2024-12-03 12:00:00", "Type": "Defect", "Version": "1.0.0"}, {"CC": ["ui_team", "qa"], "Changetime": "2024-12-02 10:00:00", "Component": "UI", "Description": "The dashboard widgets are misaligned on smaller screen resolutions.", "ID": 102, "Keywords": ["ui", "alignment", "dashboard"], "Milestone": "Release 1.1", "Owner": "bob", "Priority": "Medium", "Project": "Project B", "Reporter": "alice", "Resolution": "Unresolved", "Severity": "Major", "Status": "Open", "Summary": "UI alignment issue on dashboard", "Time": "2024-12-02 09:30:00", "Type": "Defect", "Version": "1.0.1"}, {"CC": ["search_team", "qa"], "Changetime": "2024-12-01 15:30:00", "Component": "Search", "Description": "Search queries are taking longer than expected to return results.", "ID": 103, "Keywords": ["performance", "search", "slow"], "Milestone": "Release 1.2", "Owner": "dave", "Priority": "High", "Project": "Project C", "Reporter": "charlie", "Resolution": "Unresolved", "Severity": "Critical", "Status": "In Progress", "Summary": "Performance degradation in search functionality", "Time": "2024-12-01 14:45:00", "Type": "Defect", "Version": "1.1.0"}, {"CC": ["finance_team", "qa"], "Changetime": "2024-11-30 11:45:00", "Component": "Reporting", "Description": "The total revenue calculation is incorrect in the financial report.", "ID": 104, "Keywords": ["calculation", "report", "finance"], "Milestone": "Release 1.3", "Owner": "frank", "Priority": "High", "Project": "Project D", "Reporter": "eve", "Resolution": "Unresolved", "Severity": "Major", "Status": "New", "Summary": "Incorrect calculation in financial report", "Time": "2024-11-30 11:00:00", "Type": "Defect", "Version": "1.2.0"}, {"CC": ["core_team", "qa"], "Changetime": "2024-11-29 09:00:00", "Component": "Core", "Description": "The application crashes on startup on Windows 10.", "ID": 105, "Keywords": ["crash", "startup", "windows"], "Milestone": "Release 1.4", "Owner": "hannah", "Priority": "Critical", "Project": "Project E", "Reporter": "george", "Resolution": "Unresolved", "Severity": "Critical", "Status": "Open", "Summary": "Crash on startup", "Time": "2024-11-29 08:15:00", "Type": "Defect", "Version": "1.3.0"}, {"CC": ["teamlead", "qa"], "Changetime": "2024-12-03 12:15:00", "Component": "Authentication", "Description": "Users are unable to log in due to a server error. The issue seems to be related to the authentication module.", "ID": 106, "Keywords": ["login", "bug", "urgent"], "Milestone": "Release 1.0", "Owner": "janedoe", "Priority": "High", "Project": "Project A", "Reporter": "johndoe", "Resolution": "Unresolved", "Severity": "Critical", "Status": "New", "Summary": "Fix login bug", "Time": "2024-12-03 12:00:00", "Type": "Defect", "Version": "1.0.0"}, {"CC": ["ui_team", "qa"], "Changetime": "2024-12-02 10:00:00", "Component": "UI", "Description": "The dashboard widgets are misaligned on smaller screen resolutions.", "ID": 107, "Keywords": ["ui", "alignment", "dashboard"], "Milestone": "Release 1.1", "Owner": "bob", "Priority": "Medium", "Project": "Project B", "Reporter": "alice", "Resolution": "Unresolved", "Severity": "Major", "Status": "Open", "Summary": "UI alignment issue on dashboard", "Time": "2024-12-02 09:30:00", "Type": "Defect", "Version": "1.0.1"}, {"CC": ["search_team", "qa"], "Changetime": "2024-12-01 15:30:00", "Component": "Search", "Description": "Search queries are taking longer than expected to return results.", "ID": 108, "Keywords": ["performance", "search", "slow"], "Milestone": "Release 1.2", "Owner": "dave", "Priority": "High", "Project": "Project C", "Reporter": "charlie", "Resolution": "Unresolved", "Severity": "Critical", "Status": "In Progress", "Summary": "Performance degradation in search functionality", "Time": "2024-12-01 14:45:00", "Type": "Defect", "Version": "1.1.0"}, {"CC": ["finance_team", "qa"], "Changetime": "2024-11-30 11:45:00", "Component": "Reporting", "Description": "The total revenue calculation is incorrect in the financial report.", "ID": 109, "Keywords": ["calculation", "report", "finance"], "Milestone": "Release 1.3", "Owner": "frank", "Priority": "High", "Project": "Project D", "Reporter": "eve", "Resolution": "Unresolved", "Severity": "Major", "Status": "New", "Summary": "Incorrect calculation in financial report", "Time": "2024-11-30 11:00:00", "Type": "Defect", "Version": "1.2.0"}, {"CC": ["core_team", "qa"], "Changetime": "2024-11-29 09:00:00", "Component": "Core", "Description": "The application crashes on startup on Windows 10.", "ID": 110, "Keywords": ["crash", "startup", "windows"], "Milestone": "Release 1.4", "Owner": "hannah", "Priority": "Critical", "Project": "Project E", "Reporter": "george", "Resolution": "Unresolved", "Severity": "Critical", "Status": "Open", "Summary": "Crash on startup", "Time": "2024-11-29 08:15:00", "Type": "Defect", "Version": "1.3.0"}, {"CC": ["teamlead", "qa"], "Changetime": "2024-12-03 12:15:00", "Component": "Authentication", "Description": "Users are unable to log in due to a server error. The issue seems to be related to the authentication module.", "ID": 111, "Keywords": ["login", "bug", "urgent"], "Milestone": "Release 1.0", "Owner": "janedoe", "Priority": "High", "Project": "Project A", "Reporter": "johndoe", "Resolution": "Unresolved", "Severity": "Critical", "Status": "New", "Summary": "Fix login bug", "Time": "2024-12-03 12:00:00", "Type": "Defect", "Version": "1.0.0"}];
+        let currentPage = 1;
+        let itemsPerPage = 20;
+
+        function renderTable() {
+            console.log('Rendering table');
+            const tableBody = document.getElementById('defectTableBody');
+            tableBody.innerHTML = '';
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedItems = defects.slice(start, end);
+
+            paginatedItems.forEach(defect => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>#${defect.ID}</td>
+                    <td>${defect.Summary}</td>
+                    <td>${defect.Component}</td>
+                    <td>${defect.Version}</td>
+                    <td>${defect.Milestone}</td>
+                    <td>${defect.Type}</td>
+                    <td>${defect.Severity}</td>
+                    <td>${defect.Owner}</td>
+                    <td>${defect.Status}</td>
+                    <td>${defect.Time}</td>
+                    <td>${defect.Changetime}</td>
+                    <td>${defect.Reporter}</td>
+                    <td>${defect.CC.join(', ')}</td>
+                    <td>${defect.Keywords.join(', ')}</td>
+                    <td>${defect.Resolution}</td>
+                    <td>${defect.Project}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            console.log('Rendering pagination');
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            const pageCount = Math.ceil(defects.length / itemsPerPage);
+
+            for (let i = 1; i <= pageCount; i++) {
+                const pageLink = document.createElement('a');
+                pageLink.href = '#';
+                pageLink.innerText = i;
+                if (i === currentPage) {
+                    pageLink.classList.add('active');
+                }
+                pageLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    currentPage = i;
+                    renderTable();
+                });
+                pagination.appendChild(pageLink);
+            }
+        }
+
+        function changeItemsPerPage() {
+            const input = document.getElementById('itemsPerPage');
+            itemsPerPage = parseInt(input.value);
+            if (isNaN(itemsPerPage) || itemsPerPage < 1) {
+                itemsPerPage = 20; // Default value
+                input.value = 20;
+            }
+            currentPage = 1;
+            renderTable();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM fully loaded and parsed');
+            renderTable();
+        });
+    </script>
 </body>
 </html>

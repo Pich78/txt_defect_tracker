@@ -5,11 +5,32 @@
     <title>Defect List</title>
     <link rel="stylesheet" href="trac.css">
     <link rel="stylesheet" href="code.css">
-	<link rel="stylesheet" href="report.css">
+    <link rel="stylesheet" href="report.css">
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .pagination a {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            text-decoration: none;
+            color: #333;
+        }
+        .pagination a.active {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <h1>All Active Tickets</h1>
-    <table class="listing code">
+    <label for="itemsPerPage">Items per page:</label>
+    <input type="number" id="itemsPerPage" value="20" min="1" onkeypress="if(event.key === 'Enter') changeItemsPerPage()">
+    <button onclick="changeItemsPerPage()">Update</button>
+    <table class="listing code" id="defectTable">
         <thead>
             <tr>
                 <th>Ticket</th>
@@ -30,7 +51,7 @@
                 <th>Project</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="defectTableBody">
             {% for defect in defects %}
             <tr>
                 <td>#{{ defect.ID }}</td>
@@ -53,19 +74,83 @@
             {% endfor %}
         </tbody>
     </table>
-    <div class="pagination">
-        <a href="#">&laquo;</a>
-        <a href="#">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#">4</a>
-        <a href="#">5</a>
-        <a href="#">6</a>
-        <a href="#">7</a>
-        <a href="#">8</a>
-        <a href="#">9</a>
-        <a href="#">10</a>
-        <a href="#">&raquo;</a>
-    </div>
+    <div class="pagination" id="pagination"></div>
+    <script>
+        const defects = {{ defects|tojson }};
+        let currentPage = 1;
+        let itemsPerPage = 20;
+
+        function renderTable() {
+            console.log('Rendering table');
+            const tableBody = document.getElementById('defectTableBody');
+            tableBody.innerHTML = '';
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedItems = defects.slice(start, end);
+
+            paginatedItems.forEach(defect => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>#${defect.ID}</td>
+                    <td>${defect.Summary}</td>
+                    <td>${defect.Component}</td>
+                    <td>${defect.Version}</td>
+                    <td>${defect.Milestone}</td>
+                    <td>${defect.Type}</td>
+                    <td>${defect.Severity}</td>
+                    <td>${defect.Owner}</td>
+                    <td>${defect.Status}</td>
+                    <td>${defect.Time}</td>
+                    <td>${defect.Changetime}</td>
+                    <td>${defect.Reporter}</td>
+                    <td>${defect.CC.join(', ')}</td>
+                    <td>${defect.Keywords.join(', ')}</td>
+                    <td>${defect.Resolution}</td>
+                    <td>${defect.Project}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            console.log('Rendering pagination');
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            const pageCount = Math.ceil(defects.length / itemsPerPage);
+
+            for (let i = 1; i <= pageCount; i++) {
+                const pageLink = document.createElement('a');
+                pageLink.href = '#';
+                pageLink.innerText = i;
+                if (i === currentPage) {
+                    pageLink.classList.add('active');
+                }
+                pageLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    currentPage = i;
+                    renderTable();
+                });
+                pagination.appendChild(pageLink);
+            }
+        }
+
+        function changeItemsPerPage() {
+            const input = document.getElementById('itemsPerPage');
+            itemsPerPage = parseInt(input.value);
+            if (isNaN(itemsPerPage) || itemsPerPage < 1) {
+                itemsPerPage = 20; // Default value
+                input.value = 20;
+            }
+            currentPage = 1;
+            renderTable();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM fully loaded and parsed');
+            renderTable();
+        });
+    </script>
 </body>
 </html>
