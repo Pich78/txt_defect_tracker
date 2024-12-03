@@ -3,136 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <title>Defect List</title>
+    <link rel="stylesheet" href="trac.css">
+    <link rel="stylesheet" href="code.css">
+	<link rel="stylesheet" href="report.css">
 </head>
 <body>
-    <h1>Defect List</h1>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Summary</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Type</th>
-            <th>Priority</th>
-            <th>Milestone</th>
-            <th>Component</th>
-            <th>Version</th>
-            <th>Severity</th>
-            <th>Reporter</th>
-            <th>Owner</th>
-            <th>CC</th>
-            <th>Keywords</th>
-            <th>Resolution</th>
-            <th>Time</th>
-            <th>Changetime</th>
-            <th>Project</th>
-        </tr>
-        
-        <tr>
-            <td>101</td>
-            <td>Fix login bug</td>
-            <td>Users are unable to log in due to a server error. The issue seems to be related to the authentication module.</td>
-            <td>New</td>
-            <td>Defect</td>
-            <td>High</td>
-            <td>Release 1.0</td>
-            <td>Authentication</td>
-            <td>1.0.0</td>
-            <td>Critical</td>
-            <td>johndoe</td>
-            <td>janedoe</td>
-            <td>teamlead, qa</td>
-            <td>login, bug, urgent</td>
-            <td>Unresolved</td>
-            <td>2024-12-03 12:00:00</td>
-            <td>2024-12-03 12:15:00</td>
-            <td>Project A</td>
-        </tr>
-        
-        <tr>
-            <td>102</td>
-            <td>UI alignment issue on dashboard</td>
-            <td>The dashboard widgets are misaligned on smaller screen resolutions.</td>
-            <td>Open</td>
-            <td>Defect</td>
-            <td>Medium</td>
-            <td>Release 1.1</td>
-            <td>UI</td>
-            <td>1.0.1</td>
-            <td>Major</td>
-            <td>alice</td>
-            <td>bob</td>
-            <td>ui_team, qa</td>
-            <td>ui, alignment, dashboard</td>
-            <td>Unresolved</td>
-            <td>2024-12-02 09:30:00</td>
-            <td>2024-12-02 10:00:00</td>
-            <td>Project B</td>
-        </tr>
-        
-        <tr>
-            <td>103</td>
-            <td>Performance degradation in search functionality</td>
-            <td>Search queries are taking longer than expected to return results.</td>
-            <td>In Progress</td>
-            <td>Defect</td>
-            <td>High</td>
-            <td>Release 1.2</td>
-            <td>Search</td>
-            <td>1.1.0</td>
-            <td>Critical</td>
-            <td>charlie</td>
-            <td>dave</td>
-            <td>search_team, qa</td>
-            <td>performance, search, slow</td>
-            <td>Unresolved</td>
-            <td>2024-12-01 14:45:00</td>
-            <td>2024-12-01 15:30:00</td>
-            <td>Project C</td>
-        </tr>
-        
-        <tr>
-            <td>104</td>
-            <td>Incorrect calculation in financial report</td>
-            <td>The total revenue calculation is incorrect in the financial report.</td>
-            <td>New</td>
-            <td>Defect</td>
-            <td>High</td>
-            <td>Release 1.3</td>
-            <td>Reporting</td>
-            <td>1.2.0</td>
-            <td>Major</td>
-            <td>eve</td>
-            <td>frank</td>
-            <td>finance_team, qa</td>
-            <td>calculation, report, finance</td>
-            <td>Unresolved</td>
-            <td>2024-11-30 11:00:00</td>
-            <td>2024-11-30 11:45:00</td>
-            <td>Project D</td>
-        </tr>
-        
-        <tr>
-            <td>105</td>
-            <td>Crash on startup</td>
-            <td>The application crashes on startup on Windows 10.</td>
-            <td>Open</td>
-            <td>Defect</td>
-            <td>Critical</td>
-            <td>Release 1.4</td>
-            <td>Core</td>
-            <td>1.3.0</td>
-            <td>Critical</td>
-            <td>george</td>
-            <td>hannah</td>
-            <td>core_team, qa</td>
-            <td>crash, startup, windows</td>
-            <td>Unresolved</td>
-            <td>2024-11-29 08:15:00</td>
-            <td>2024-11-29 09:00:00</td>
-            <td>Project E</td>
-        </tr>
-        
+    <h1>All Active Tickets</h1>
+    <table class="listing code">
+        <thead>
+            <tr>
+                <th>Ticket</th>
+                <th>Summary</th>
+                <th>Component</th>
+                <th>Version</th>
+                <th>Milestone</th>
+                <th>Type</th>
+                <th>Severity</th>
+                <th>Owner</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Changetime</th>
+                <th>Reporter</th>
+                <th>CC</th>
+                <th>Keywords</th>
+                <th>Resolution</th>
+                <th>Project</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            <tr>
+                <td>#101</td>
+                <td>Fix login bug</td>
+                <td>Authentication</td>
+                <td>1.0.0</td>
+                <td>Release 1.0</td>
+                <td>Defect</td>
+                <td>Critical</td>
+                <td>janedoe</td>
+                <td>New</td>
+                <td>2024-12-03 12:00:00</td>
+                <td>2024-12-03 12:15:00</td>
+                <td>johndoe</td>
+                <td>teamlead, qa</td>
+                <td>login, bug, urgent</td>
+                <td>Unresolved</td>
+                <td>Project A</td>
+            </tr>
+            
+            <tr>
+                <td>#102</td>
+                <td>UI alignment issue on dashboard</td>
+                <td>UI</td>
+                <td>1.0.1</td>
+                <td>Release 1.1</td>
+                <td>Defect</td>
+                <td>Major</td>
+                <td>bob</td>
+                <td>Open</td>
+                <td>2024-12-02 09:30:00</td>
+                <td>2024-12-02 10:00:00</td>
+                <td>alice</td>
+                <td>ui_team, qa</td>
+                <td>ui, alignment, dashboard</td>
+                <td>Unresolved</td>
+                <td>Project B</td>
+            </tr>
+            
+            <tr>
+                <td>#103</td>
+                <td>Performance degradation in search functionality</td>
+                <td>Search</td>
+                <td>1.1.0</td>
+                <td>Release 1.2</td>
+                <td>Defect</td>
+                <td>Critical</td>
+                <td>dave</td>
+                <td>In Progress</td>
+                <td>2024-12-01 14:45:00</td>
+                <td>2024-12-01 15:30:00</td>
+                <td>charlie</td>
+                <td>search_team, qa</td>
+                <td>performance, search, slow</td>
+                <td>Unresolved</td>
+                <td>Project C</td>
+            </tr>
+            
+            <tr>
+                <td>#104</td>
+                <td>Incorrect calculation in financial report</td>
+                <td>Reporting</td>
+                <td>1.2.0</td>
+                <td>Release 1.3</td>
+                <td>Defect</td>
+                <td>Major</td>
+                <td>frank</td>
+                <td>New</td>
+                <td>2024-11-30 11:00:00</td>
+                <td>2024-11-30 11:45:00</td>
+                <td>eve</td>
+                <td>finance_team, qa</td>
+                <td>calculation, report, finance</td>
+                <td>Unresolved</td>
+                <td>Project D</td>
+            </tr>
+            
+            <tr>
+                <td>#105</td>
+                <td>Crash on startup</td>
+                <td>Core</td>
+                <td>1.3.0</td>
+                <td>Release 1.4</td>
+                <td>Defect</td>
+                <td>Critical</td>
+                <td>hannah</td>
+                <td>Open</td>
+                <td>2024-11-29 08:15:00</td>
+                <td>2024-11-29 09:00:00</td>
+                <td>george</td>
+                <td>core_team, qa</td>
+                <td>crash, startup, windows</td>
+                <td>Unresolved</td>
+                <td>Project E</td>
+            </tr>
+            
+        </tbody>
     </table>
+    <div class="pagination">
+        <a href="#">&laquo;</a>
+        <a href="#">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">4</a>
+        <a href="#">5</a>
+        <a href="#">6</a>
+        <a href="#">7</a>
+        <a href="#">8</a>
+        <a href="#">9</a>
+        <a href="#">10</a>
+        <a href="#">&raquo;</a>
+    </div>
 </body>
 </html>

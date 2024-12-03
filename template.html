@@ -3,52 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <title>Defect List</title>
+    <link rel="stylesheet" href="trac.css">
+    <link rel="stylesheet" href="code.css">
+	<link rel="stylesheet" href="report.css">
 </head>
 <body>
-    <h1>Defect List</h1>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Summary</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Type</th>
-            <th>Priority</th>
-            <th>Milestone</th>
-            <th>Component</th>
-            <th>Version</th>
-            <th>Severity</th>
-            <th>Reporter</th>
-            <th>Owner</th>
-            <th>CC</th>
-            <th>Keywords</th>
-            <th>Resolution</th>
-            <th>Time</th>
-            <th>Changetime</th>
-            <th>Project</th>
-        </tr>
-        {% for defect in defects %}
-        <tr>
-            <td>{{ defect.ID }}</td>
-            <td>{{ defect.Summary }}</td>
-            <td>{{ defect.Description }}</td>
-            <td>{{ defect.Status }}</td>
-            <td>{{ defect.Type }}</td>
-            <td>{{ defect.Priority }}</td>
-            <td>{{ defect.Milestone }}</td>
-            <td>{{ defect.Component }}</td>
-            <td>{{ defect.Version }}</td>
-            <td>{{ defect.Severity }}</td>
-            <td>{{ defect.Reporter }}</td>
-            <td>{{ defect.Owner }}</td>
-            <td>{{ defect.CC | join(', ') }}</td>
-            <td>{{ defect.Keywords | join(', ') }}</td>
-            <td>{{ defect.Resolution }}</td>
-            <td>{{ defect.Time }}</td>
-            <td>{{ defect.Changetime }}</td>
-            <td>{{ defect.Project }}</td>
-        </tr>
-        {% endfor %}
+    <h1>All Active Tickets</h1>
+    <table class="listing code">
+        <thead>
+            <tr>
+                <th>Ticket</th>
+                <th>Summary</th>
+                <th>Component</th>
+                <th>Version</th>
+                <th>Milestone</th>
+                <th>Type</th>
+                <th>Severity</th>
+                <th>Owner</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Changetime</th>
+                <th>Reporter</th>
+                <th>CC</th>
+                <th>Keywords</th>
+                <th>Resolution</th>
+                <th>Project</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for defect in defects %}
+            <tr>
+                <td>#{{ defect.ID }}</td>
+                <td>{{ defect.Summary }}</td>
+                <td>{{ defect.Component }}</td>
+                <td>{{ defect.Version }}</td>
+                <td>{{ defect.Milestone }}</td>
+                <td>{{ defect.Type }}</td>
+                <td>{{ defect.Severity }}</td>
+                <td>{{ defect.Owner }}</td>
+                <td>{{ defect.Status }}</td>
+                <td>{{ defect.Time }}</td>
+                <td>{{ defect.Changetime }}</td>
+                <td>{{ defect.Reporter }}</td>
+                <td>{{ defect.CC | join(', ') }}</td>
+                <td>{{ defect.Keywords | join(', ') }}</td>
+                <td>{{ defect.Resolution }}</td>
+                <td>{{ defect.Project }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
+    <div class="pagination">
+        <a href="#">&laquo;</a>
+        <a href="#">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">4</a>
+        <a href="#">5</a>
+        <a href="#">6</a>
+        <a href="#">7</a>
+        <a href="#">8</a>
+        <a href="#">9</a>
+        <a href="#">10</a>
+        <a href="#">&raquo;</a>
+    </div>
 </body>
 </html>
