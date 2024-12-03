@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Defect List</title>
+</head>
+<body>
+    <h1>Defect List</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Summary</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Type</th>
+            <th>Priority</th>
+            <th>Milestone</th>
+            <th>Component</th>
+            <th>Version</th>
+            <th>Severity</th>
+            <th>Reporter</th>
+            <th>Owner</th>
+            <th>CC</th>
+            <th>Keywords</th>
+            <th>Resolution</th>
+            <th>Time</th>
+            <th>Changetime</th>
+            <th>Project</th>
+        </tr>
+        {% for defect in defects %}
+        <tr>
+            <td>{{ defect.ID }}</td>
+            <td>{{ defect.Summary }}</td>
+            <td>{{ defect.Description }}</td>
+            <td>{{ defect.Status }}</td>
+            <td>{{ defect.Type }}</td>
+            <td>{{ defect.Priority }}</td>
+            <td>{{ defect.Milestone }}</td>
+            <td>{{ defect.Component }}</td>
+            <td>{{ defect.Version }}</td>
+            <td>{{ defect.Severity }}</td>
+            <td>{{ defect.Reporter }}</td>
+            <td>{{ defect.Owner }}</td>
+            <td>{{ defect.CC | join(', ') }}</td>
+            <td>{{ defect.Keywords | join(', ') }}</td>
+            <td>{{ defect.Resolution }}</td>
+            <td>{{ defect.Time }}</td>
+            <td>{{ defect.Changetime }}</td>
+            <td>{{ defect.Project }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
