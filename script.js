@@ -3,25 +3,28 @@ let itemsPerPage = 20;
 let sortOrder = {};
 const columns = ['ID', 'Summary', 'Component', 'Version', 'Milestone', 'Type', 'Severity', 'Owner', 'Status', 'Time', 'Changetime', 'Reporter', 'CC', 'Keywords', 'Resolution', 'Project'];
 let filterRows = [{ ID: 'ALL', Summary: 'ALL', Component: 'ALL', Version: 'ALL', Milestone: 'ALL', Type: 'ALL', Severity: 'ALL', Owner: 'ALL', Status: 'ALL', Time: 'ALL', Changetime: 'ALL', Reporter: 'ALL', CC: 'ALL', Keywords: 'ALL', Resolution: 'ALL', Project: 'ALL' }];
+let visibleColumns = new Set(columns); // Track visible columns
 
 function populateFilters() {
     filterRows.forEach((filters, index) => {
         const filterRow = document.getElementById(`filterRow${index + 1}`);
         filterRow.innerHTML = '';
         columns.forEach(column => {
-            const uniqueValues = [...new Set(defects.map(defect => defect[column]))];
-            const select = document.createElement('select');
-            select.classList.add('filter');
-            select.id = `filter${column}${index + 1}`;
-            select.onchange = applyFilters;
-            select.innerHTML = '<option value="ALL">ALL</option>';
-            uniqueValues.forEach(value => {
-                const option = document.createElement('option');
-                option.value = value;
-                option.text = value;
-                select.appendChild(option);
-            });
-            filterRow.appendChild(select);
+            if (visibleColumns.has(column)) {
+                const uniqueValues = [...new Set(defects.map(defect => defect[column]))];
+                const select = document.createElement('select');
+                select.classList.add('filter');
+                select.id = `filter${column}${index + 1}`;
+                select.onchange = applyFilters;
+                select.innerHTML = '<option value="ALL">ALL</option>';
+                uniqueValues.forEach(value => {
+                    const option = document.createElement('option');
+                    option.value = value;
+                    option.text = value;
+                    select.appendChild(option);
+                });
+                filterRow.appendChild(select);
+            }
         });
     });
 }
@@ -43,28 +46,19 @@ function renderTable() {
 
     paginatedItems.forEach(defect => {
         const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>#${defect.ID}</td>
-            <td>${defect.Summary}</td>
-            <td>${defect.Component}</td>
-            <td>${defect.Version}</td>
-            <td>${defect.Milestone}</td>
-            <td>${defect.Type}</td>
-            <td>${defect.Severity}</td>
-            <td>${defect.Owner}</td>
-            <td>${defect.Status}</td>
-            <td>${defect.Time}</td>
-            <td>${defect.Changetime}</td>
-            <td>${defect.Reporter}</td>
-            <td>${defect.CC.join(', ')}</td>
-            <td>${defect.Keywords.join(', ')}</td>
-            <td>${defect.Resolution}</td>
-            <td>${defect.Project}</td>
-        `;
+        columns.forEach(column => {
+            if (visibleColumns.has(column)) {
+                const cell = document.createElement('td');
+                cell.classList.add(`column-${column}`);
+                cell.innerText = Array.isArray(defect[column]) ? defect[column].join(', ') : defect[column];
+                row.appendChild(cell);
+            }
+        });
         tableBody.appendChild(row);
     });
 
     renderPagination(filteredItems.length);
+    updateColumnVisibility();
 }
 
 function renderPagination(totalItems) {
@@ -123,8 +117,12 @@ function sortTable(column) {
 function applyFilters() {
     filterRows.forEach((filters, index) => {
         columns.forEach(column => {
-            const filterValue = document.getElementById(`filter${column}${index + 1}`).value;
-            filters[column] = filterValue;
+            if (visibleColumns.has(column)) {
+                const filterValue = document.getElementById(`filter${column}${index + 1}`).value;
+                filters[column] = filterValue;
+            } else {
+                filters[column] = 'ALL';
+            }
         });
     });
     currentPage = 1;
@@ -142,8 +140,48 @@ function addFilterRow() {
     populateFilters();
 }
 
+function updateColumnVisibility() {
+    columns.forEach(column => {
+        const isVisible = visibleColumns.has(column);
+        const th = document.querySelector(`th.column-${column}`);
+        const tds = document.querySelectorAll(`td.column-${column}`);
+        if (isVisible) {
+            th.style.display = '';
+            tds.forEach(td => td.style.display = '');
+        } else {
+            th.style.display = 'none';
+            tds.forEach(td => td.style.display = 'none');
+        }
+    });
+    populateFilters(); // Update filters when a column is toggled
+}
+
+function toggleColumnVisibility(column) {
+    if (visibleColumns.has(column)) {
+        visibleColumns.delete(column);
+    } else {
+        visibleColumns.add(column);
+    }
+    updateColumnVisibility();
+}
+
+function populateColumnSelector() {
+    const columnSelector = document.getElementById('columnSelector');
+    columns.forEach(column => {
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = true;
+        checkbox.onchange = () => toggleColumnVisibility(column);
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(column));
+        columnSelector.appendChild(label);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed');
     populateFilters();
+    populateColumnSelector();
     renderTable();
 });

@@ -38,6 +38,29 @@
             display: flex;
             justify-content: space-between;
         }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content label {
+            display: block;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+        .dropdown-content input {
+            margin-right: 10px;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -46,6 +69,12 @@
     <input type="number" id="itemsPerPage" value="20" min="1" onkeypress="if(event.key === 'Enter') changeItemsPerPage()">
     <button onclick="changeItemsPerPage()">Update</button>
     <button onclick="addFilterRow()">Add Filter Row</button>
+    <div class="dropdown">
+        <button>Show/Hide Columns</button>
+        <div class="dropdown-content" id="columnSelector">
+            <!-- Checkboxes will be populated here by JavaScript -->
+        </div>
+    </div>
     <div id="filterContainer">
         <div class="filter-row" id="filterRow1">
             <!-- Filter dropdowns will be populated here by JavaScript -->
@@ -54,22 +83,22 @@
     <table class="listing code" id="defectTable">
         <thead>
             <tr>
-                <th>Ticket</th>
-                <th>Summary</th>
-                <th>Component</th>
-                <th>Version</th>
-                <th>Milestone</th>
-                <th>Type</th>
-                <th>Severity</th>
-                <th>Owner</th>
-                <th>Status</th>
-                <th>Created</th>
-                <th>Changetime</th>
-                <th>Reporter</th>
-                <th>CC</th>
-                <th>Keywords</th>
-                <th>Resolution</th>
-                <th>Project</th>
+                <th class="column-ID">Ticket</th>
+                <th class="column-Summary">Summary</th>
+                <th class="column-Component">Component</th>
+                <th class="column-Version">Version</th>
+                <th class="column-Milestone">Milestone</th>
+                <th class="column-Type">Type</th>
+                <th class="column-Severity">Severity</th>
+                <th class="column-Owner">Owner</th>
+                <th class="column-Status">Status</th>
+                <th class="column-Time">Created</th>
+                <th class="column-Changetime">Changetime</th>
+                <th class="column-Reporter">Reporter</th>
+                <th class="column-CC">CC</th>
+                <th class="column-Keywords">Keywords</th>
+                <th class="column-Resolution">Resolution</th>
+                <th class="column-Project">Project</th>
             </tr>
         </thead>
         <tbody id="defectTableBody">
