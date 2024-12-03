@@ -23,6 +23,9 @@
             background-color: #007bff;
             color: white;
         }
+        th {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -33,22 +36,22 @@
     <table class="listing code" id="defectTable">
         <thead>
             <tr>
-                <th>Ticket</th>
-                <th>Summary</th>
-                <th>Component</th>
-                <th>Version</th>
-                <th>Milestone</th>
-                <th>Type</th>
-                <th>Severity</th>
-                <th>Owner</th>
-                <th>Status</th>
-                <th>Created</th>
-                <th>Changetime</th>
-                <th>Reporter</th>
-                <th>CC</th>
-                <th>Keywords</th>
-                <th>Resolution</th>
-                <th>Project</th>
+                <th onclick="sortTable('ID')">Ticket</th>
+                <th onclick="sortTable('Summary')">Summary</th>
+                <th onclick="sortTable('Component')">Component</th>
+                <th onclick="sortTable('Version')">Version</th>
+                <th onclick="sortTable('Milestone')">Milestone</th>
+                <th onclick="sortTable('Type')">Type</th>
+                <th onclick="sortTable('Severity')">Severity</th>
+                <th onclick="sortTable('Owner')">Owner</th>
+                <th onclick="sortTable('Status')">Status</th>
+                <th onclick="sortTable('Time')">Created</th>
+                <th onclick="sortTable('Changetime')">Changetime</th>
+                <th onclick="sortTable('Reporter')">Reporter</th>
+                <th onclick="sortTable('CC')">CC</th>
+                <th onclick="sortTable('Keywords')">Keywords</th>
+                <th onclick="sortTable('Resolution')">Resolution</th>
+                <th onclick="sortTable('Project')">Project</th>
             </tr>
         </thead>
         <tbody id="defectTableBody">
@@ -79,6 +82,8 @@
         const defects = {{ defects|tojson }};
         let currentPage = 1;
         let itemsPerPage = 20;
+        let sortOrder = {};
+        const columns = ['ID', 'Summary', 'Component', 'Version', 'Milestone', 'Type', 'Severity', 'Owner', 'Status', 'Time', 'Changetime', 'Reporter', 'CC', 'Keywords', 'Resolution', 'Project'];
 
         function renderTable() {
             console.log('Rendering table');
@@ -144,6 +149,26 @@
                 input.value = 20;
             }
             currentPage = 1;
+            renderTable();
+        }
+
+        function sortTable(column) {
+            if (!sortOrder[column]) {
+                sortOrder[column] = 'asc';
+            } else {
+                sortOrder[column] = sortOrder[column] === 'asc' ? 'desc' : 'asc';
+            }
+
+            defects.sort((a, b) => {
+                if (a[column] < b[column]) {
+                    return sortOrder[column] === 'asc' ? -1 : 1;
+                }
+                if (a[column] > b[column]) {
+                    return sortOrder[column] === 'asc' ? 1 : -1;
+                }
+                return 0;
+            });
+
             renderTable();
         }
 
